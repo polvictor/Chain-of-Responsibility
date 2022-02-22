@@ -7,10 +7,7 @@ public:
     virtual Handler* SetNext(Handler* handler) = 0;
     virtual std::string Handle(std::string request) = 0;
 };
-/**
- * Поведение цепочки по умолчанию может быть реализовано внутри базового класса
- * обработчика.
- */
+/** Povedenie tsepochki po umolchaniyu moget byt' realizovano vnutri bazovogo klassa obrabotchika.*/
 class AbstractHandler : public Handler {
     /**
      * @var Handler
@@ -23,8 +20,7 @@ public:
     }
     Handler* SetNext(Handler* handler) override {
         this->next_handler_ = handler;
-        // Возврат обработчика отсюда позволит связать обработчики простым способом,
-        // вот так:
+        // Vozvrat obrabotchika otsyuda pozvolit svyazat' obrabotchiki prostim sposobom vot tak::
         // $monkey->setNext($squirrel)->setNext($dog);
         return handler;
     }
@@ -36,10 +32,8 @@ public:
         return {};
     }
 };
-/**
- * Все Конкретные Обработчики либо обрабатывают запрос, либо передают его
- * следующему обработчику в цепочке.
- */
+/** Vse Konkretniye Obrabotchiki libo obrabativayut zapros? libo peredayut ego
+* sleduyuschemu obrabotchiku v tsepochke.*/
 class MonkeyHandler : public AbstractHandler {
 public:
     std::string Handle(std::string request) override {
@@ -73,11 +67,9 @@ public:
         }
     }
 };
-/**
- * Обычно клиентский код приспособлен для работы с единственным обработчиком. В
- * большинстве случаев клиенту даже неизвестно, что этот обработчик является
- * частью цепочки.
- */
+/* Obuchno klientskiy kod prisposoblen dlya raboti s edinstvennim obrabotchikom.
+* V bol'shinstve sluchayev klienty daghe neizvestno, chto etot obrabotchik yavlyaetsya
+* chast'yu tsepochki.*/
 void ClientCode(Handler& handler) {
     std::vector<std::string> food = { "Nut", "Banana", "Cup of coffee" };
     for (const std::string& f : food) {
@@ -91,8 +83,7 @@ void ClientCode(Handler& handler) {
         }
     }
 }
-/**
- * Другая часть клиентского кода создает саму цепочку.
+/** Drugaya chast' klientskogo koda sozdayet samy tsepochky.
  */
 int main() {
     MonkeyHandler* monkey = new MonkeyHandler;
@@ -100,9 +91,8 @@ int main() {
     DogHandler* dog = new DogHandler;
     monkey->SetNext(squirrel)->SetNext(dog);
 
-    /**
-     * Клиент должен иметь возможность отправлять запрос любому обработчику, а не
-     * только первому в цепочке.
+    /** Klient dolzhen imet' vozmozhnost' otpravlyat' zapros lyubomy obrabotchiky, a ne
+    * tol'ko pervomy v tsepochke.
      */
     std::cout << "Chain: Monkey > Squirrel > Dog\n\n";
     ClientCode(*monkey);
